@@ -1,15 +1,20 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
-    database_url: str = "postgresql://postgres:postgres@localhost:5432/game_health"
-    redis_url: str = "redis://localhost:6379"
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
+
+    database_url: str = ""
+    redis_url: str = ""
     steam_api_key: str = ""
     igdb_client_id: str = ""
     igdb_client_secret: str = ""
-    cors_origins: list[str] = ["http://localhost:3000"]
-
-    model_config = {"env_file": ".env", "env_file_encoding": "utf-8"}
+    cors_origins: list[str] = []
+    port: int = 8000
 
 
 settings = Settings()

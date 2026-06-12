@@ -12,6 +12,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN python -m compileall src
-
-CMD sh -c "PYTHONPATH=/app alembic upgrade head && uvicorn src.main:app --host 0.0.0.0 --port \$PORT"
+CMD sh -c "PYTHONPATH=/app alembic upgrade head && uvicorn src.main:app --host 0.0.0.0 --port \${PORT:-8000}"
