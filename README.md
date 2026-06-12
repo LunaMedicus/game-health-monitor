@@ -260,37 +260,65 @@ game-health-monitor/
 
 ---
 
-## Deployment
+## Deployment (Free)
 
-### Frontend (Vercel — recommended)
+The full stack can be deployed 100% free using Vercel (frontend) + Render (backend + database).
+
+### Step 1: Deploy Frontend on Vercel
+
+1. Go to [vercel.com](https://vercel.com) and sign in with GitHub
+2. Click **Add New → Project**
+3. Select `game-health-monitor` from your repos
+4. Configure:
+   - **Framework Preset:** Next.js
+   - **Root Directory:** `apps/web`
+   - **Build Command:** `pnpm --filter web build` (Vercel auto-detects this)
+   - **Install Command:** `pnpm install`
+5. Add environment variable:
+   ```
+   NEXT_PUBLIC_API_URL = https://vitals-api.onrender.com
+   ```
+   (Use your Render API URL from Step 2)
+6. Click **Deploy** — your frontend is live at `https://vitals.vercel.app`
+
+### Step 2: Deploy Backend + Database on Render
+
+1. Go to [render.com](https://render.com) and sign up
+2. Create a **PostgreSQL** database:
+   - Click **New → PostgreSQL**
+   - Name: `vitals-db`
+   - Plan: **Free**
+   - Copy the **Internal Database URL**
+3. Create a **Web Service**:
+   - Click **New → Web Service**
+   - Connect your `game-health-monitor` GitHub repo
+   - Configure:
+     - **Name:** `vitals-api`
+     - **Root Directory:** `apps/api`
+     - **Runtime:** Docker
+     - **Plan:** Free
+   - Add environment variables:
+     ```
+     DATABASE_URL = (your Internal Database URL from above)
+     CORS_ORIGINS = ["https://vitals.vercel.app"]
+     ```
+   - Click **Create Web Service**
+
+4. The API will auto-run migrations on startup and be live at `https://vitals-api.onrender.com`
+
+### Step 3: Connect Them
+
+1. Go back to Vercel and update `NEXT_PUBLIC_API_URL` to your Render API URL
+2. Redeploy from the Vercel dashboard
+
+### Alternative: One-Click Deploy
+
+Use the included `render.yaml` for backend:
 
 ```bash
-# Install Vercel CLI
-npm i -g vercel
-vercel --prod
+# Fork the repo on GitHub, then visit:
+https://render.com/deploy?repo=https://github.com/LunaMedicus/game-health-monitor
 ```
-
-Set `NEXT_PUBLIC_API_URL` to your deployed API URL.
-
-### Backend (Docker + any cloud VM)
-
-```bash
-docker compose -f docker-compose.prod.yml up -d
-```
-
-The FastAPI backend runs on `:8000`. Use nginx or a cloud load balancer for SSL termination.
-
-### GitHub Pages (static export only)
-
-For a static portfolio build:
-
-```bash
-cd apps/web
-pnpm build  # static HTML/CSS/JS output
-# Deploy .next/standalone or out/ to GitHub Pages
-```
-
-> **Note:** The live import feature requires the FastAPI backend. For a fully static demo, the app shows the last-cached game data.
 
 ---
 

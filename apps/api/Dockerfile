@@ -7,9 +7,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
-COPY apps/api/requirements.txt .
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY apps/api /app
+COPY . .
 
-CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+RUN python -m compileall src
+
+CMD sh -c "PYTHONPATH=/app alembic upgrade head && uvicorn src.main:app --host 0.0.0.0 --port \$PORT"

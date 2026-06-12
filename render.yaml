@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: vitals-api
+    runtime: docker
+    repo: https://github.com/LunaMedicus/game-health-monitor
+    rootDir: apps/api
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: vitals-db
+          property: connectionString
+      - key: REDIS_URL
+        value: redis://placeholder
+      - key: CORS_ORIGINS
+        value: '["https://your-app.vercel.app"]'
+
+databases:
+  - name: vitals-db
+    plan: free
