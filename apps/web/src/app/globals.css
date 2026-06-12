@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #090909;
+  --surface: #111111;
+  --surface-raised: #171717;
+  --border: #262626;
+  --border-active: #3a3a3a;
+  --text: #f1eee8;
+  --muted: #8f8a82;
+  --very-muted: #5a5650;
+
+  --healthy: #70e38b;
+  --playable: #e6c84f;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --cyan: #22d3ee;
+}
+
+@layer base {
+  body {
+    color: var(--text);
+    background: var(--bg);
+    font-family: var(--font-sans), sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: rgba(34, 211, 238, 0.2);
+  }
+}
+
+@layer components {
+  .gauge-track {
+    stroke: var(--border);
+  }
+
+  .gauge-fill {
+    transition: stroke-dashoffset 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .score-count {
+    animation: countUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  .card-hover {
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .card-hover:hover {
+    border-color: var(--border-active);
+  }
+
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 0;
+  }
+}
+
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@layer utilities {
+  .font-mono {
+    font-family: var(--font-mono), monospace;
+  }
+
+  .font-display {
+    font-family: var(--font-display), serif;
+  }
+
+  .font-pixel {
+    font-family: var(--font-pixel), monospace;
+  }
+}
